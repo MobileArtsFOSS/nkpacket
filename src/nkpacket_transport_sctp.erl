@@ -265,6 +265,11 @@ handle_info({sctp, Socket, Ip, Port, {Anc, SAC}}, State) ->
     ok = inet:setopts(Socket, [{active, once}]),
     {noreply, State1};
 
+handle_info({sctp_error, Socket, _Ip, _Port, {_Anc, #sctp_remote_error{error = 8}}}, State) ->
+    ok = inet:setopts(Socket, [{active, once}]),
+    lager:notice("Error sctp_remote_error 8 received, ignore it for now", []),
+    {noreply, State};
+
 handle_info({'DOWN', MRef, process, _Pid, _Reason}, #state{monitor_ref=MRef}=State) ->
     {stop, normal, State};
 
