@@ -354,7 +354,7 @@ do_connect(Ip, Port, AssocId, Meta, State) ->
     Conn = {Proto, sctp, Ip, Port},
     case nkpacket_transport:get_connected(Conn, #{srv_id=>SrvId}) of
         [Pid|_] -> 
-            {ok, Pid};
+            {ok, NkPort#nkport{pid=Pid}};
         [] -> 
             Meta1 = case Meta of
                 undefined -> ListenMeta;
